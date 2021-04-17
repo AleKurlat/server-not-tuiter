@@ -1,10 +1,11 @@
 {
-  "name": "app_ejemplo",
+  "name": "app_login",
   "version": "1.0.0",
   "description": "",
-  "main": "ejemplovideo.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
