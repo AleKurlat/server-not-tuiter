@@ -11,7 +11,7 @@ const util = require ("util");
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT ? process.env.PORT : 3000; // estructura ternaria, un IF completo, se asigna a variable un valor u otro según si se cumple, el signo de pregunta consulta si existe, si no existe hace lo otro
+const port = process.env.PORT ? process.env.PORT : 3001; // estructura ternaria, un IF completo, se asigna a variable un valor u otro según si se cumple, el signo de pregunta consulta si existe, si no existe hace lo otro
 
 app.use(cors());
 app.use(express.json());
