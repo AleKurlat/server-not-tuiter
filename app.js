@@ -143,9 +143,11 @@ app.post("/login", async (req, res)=> {
 
 // Si se envía un GET a localhost/ con Authorization como Key y el token como Header, retorna que el logueo fue correcto
 
-app.get("/", (req, res)=> {
+app.get("/", async (req, res)=> {
     try {
-        res.send("Logueado correctamente")
+        let query = "SELECT id, usuario, email, cel from usuarios";
+        let respuesta = await qy(query, []);
+        res.send(respuesta);
     }
     catch(e){
         res.status(413).send({message: e.message});
