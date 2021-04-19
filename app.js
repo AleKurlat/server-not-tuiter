@@ -42,13 +42,13 @@ auth.unless = unless; // defino método de excepción al middleware de autentica
 // llamo a método de excepción al middleware de autenticación, que se interpone antes de hacer cualquier cosa
 app.use(auth.unless({
     path: [
-        {url : "/login", methods: ["POST"]}, //es un array porque podria usar varios metodos separadas por comas
-        {url : "/registro", methods: ["POST"]},
+        {url : "/api/login", methods: ["POST"]}, //es un array porque podria usar varios metodos separadas por comas
+        {url : "/api/registro", methods: ["POST"]},
     ]
 })); 
 
 // paso 1 registración
-app.post("/registro", async (req, res)=>{
+app.post("/api/registro", async (req, res)=>{
     try{
         if(!req.body.usuario || !req.body.clave || !req.body.email || !req.body.cel) {
             throw new Error ("No enviaste todos los datos necesarios");
@@ -79,7 +79,7 @@ app.post("/registro", async (req, res)=>{
 
 // paso 2 login
 
-app.post("/login", async (req, res)=> {
+app.post("/api/login", async (req, res)=> {
     try {
         if(!req.body.usuario || !req.body.clave) {
             throw new Error ("No enviaste todos los datos necesarios");
