@@ -43,4 +43,25 @@ router.post("/", async (req, res)=>{
     }
 });
 
+router.get("/:id", async function (req, res){
+    try{
+        let respuesta = await model.traerUnUsuario(req.params.id);
+        res.send(respuesta);
+    }
+    catch(e){
+        res.status(413).send({ "Error": e.message });
+    }
+})
+
+router.get("/user/:usuario", async function (req, res){
+    try{
+        let respuesta = await model.buscarUnUsuarioPorUsername(req.params.usuario);
+        delete respuesta[0].clave;
+        res.send(respuesta[0]);
+        }
+    catch(e){
+        res.status(413).send({ "Error": e.message });
+    }
+})
+
 module.exports = router;
