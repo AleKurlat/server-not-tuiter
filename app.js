@@ -7,9 +7,13 @@ const cors = require('cors');
 const model = require("./model.js");
 const app = express();
 const port = process.env.PORT ? process.env.PORT : 3001;
+const rutasPosteos = require('./rutasPosteos.js');
+const rutasUsuarios= require('./rutasUsuarios.js');
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/posteos", rutasPosteos);
+app.use("/api/usuarios", rutasUsuarios);
 
 //establezco middleware de autenticación
 
@@ -43,41 +47,11 @@ auth.unless = unless; // defino método de excepción al middleware de autentica
 app.use(auth.unless({
     path: [
         {url : "/api/login", methods: ["POST"]}, //es un array porque podria usar varios metodos separadas por comas
-        {url : "/api/registro", methods: ["POST"]},
+        {url : "/api/usuarios", methods: ["POST"]},
     ]
 })); 
 
-// paso 1 registración
-app.post("/api/registro", async (req, res)=>{
-    try{
-        if(!req.body.usuario || !req.body.clave || !req.body.email || !req.body.cel) {
-            throw new Error ("No enviaste todos los datos necesarios");
-        }
-
-        //valido que el usuario no esté ya en la base de datos
-        let respuesta = await model.buscarUsuariosPorEmail(req.body.email);        
-        if (respuesta.length > 0) {
-            throw new Error ("Ya existe un usuario con ese correo electrónico");
-        }  
-        respuesta = await model.buscarUsuariosPorUsername(req.body.usuario);     
-        if (respuesta.length > 0) {
-            throw new Error ("Ya existe un usuario con ese nombre");
-        }
-        
-        // si esta todo bien, encripto la clave
-        const claveEncriptada = await bcrypt.hash(req.body.clave, 10); // es asincronica asi que hay que agregarle siempre async al POST
-
-        // Guardo el nuevo registro con la clave encriptada y le muestro al usuario los otros datos
-        respuesta = await model.registrarUsuario(req.body.usuario, claveEncriptada, req.body.email, req.body.cel);
-        let regresarUsuarioRegistrado = await model.traerUnUsuario(respuesta); 
-        res.json(regresarUsuarioRegistrado);
-    }
-    catch(e){
-        res.status(413).send({message: e.message});
-    }
-});
-
-// paso 2 login
+// Loguearse
 
 app.post("/api/login", async (req, res)=> {
     try {
@@ -111,38 +85,6 @@ app.post("/api/login", async (req, res)=> {
         res.send({token});
     }
 
-    catch(e){
-        res.status(413).send({message: e.message});
-    }
-});
-
-// Las siguientes rutas dan respuesta solo si en la petición se envía Authorization como Key y el token como Header
-
-app.get("/api/posteos", async (req, res)=> {
-    try {
-        let respuesta = await model.traerPosteos();
-        res.send(respuesta);
-    }
-    catch(e){
-        res.status(413).send({message: e.message});
-    }
-});
-
-app.post("/api/posteos", async (req, res)=> {
-    try {
-        let respuesta = "";
-        res.send(respuesta);
-    }
-    catch(e){
-        res.status(413).send({message: e.message});
-    }
-});
-
-app.get("/api/usuarios", async (req, res)=> {
-    try {
-        let respuesta = await model.traerUsuarios();
-        res.send(respuesta);
-    }
     catch(e){
         res.status(413).send({message: e.message});
     }
