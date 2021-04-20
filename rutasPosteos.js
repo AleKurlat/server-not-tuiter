@@ -14,7 +14,7 @@ router.get("/", async (req, res)=> {
 
 router.post("/", async (req, res)=> {
     try {
-        let respuesta = "";
+        let respuesta = await model.agregarPosteo(req.body.body, req.body.id_user);
         res.send(respuesta);
     }
     catch(e){
