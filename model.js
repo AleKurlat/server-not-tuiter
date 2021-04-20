@@ -35,9 +35,14 @@ module.exports = {
         let respuesta = await qy("SELECT * from post", []);
         return respuesta;
     },
+
+    traerUnPosteo: async function(id){
+        let respuesta = await qy("SELECT * from post WHERE id = ?", [id]);
+        return respuesta[0];
+    },
     
     agregarPosteo: async function(body, id_user){
         let respuesta = await qy("INSERT INTO post (body, id_user) VALUE (?, ?)", [body, id_user]);
-        return respuesta;
+        return respuesta.insertId;
     }
 }

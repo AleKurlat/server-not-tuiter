@@ -15,11 +15,22 @@ router.get("/", async (req, res)=> {
 router.post("/", async (req, res)=> {
     try {
         let respuesta = await model.agregarPosteo(req.body.body, req.body.id_user);
-        res.send(respuesta);
+        let regresarPosteo = await model.traerUnPosteo(respuesta);
+        res.send(regresarPosteo);
     }
     catch(e){
         res.status(413).send({message: e.message});
     }
 });
+
+router.get("/:id", async function (req, res){
+    try{
+        let respuesta = await model.traerUnPosteo(req.params.id);
+        res.send(respuesta);
+    }
+    catch(e){
+        res.status(413).send({ "Error": e.message });
+    }
+})
 
 module.exports = router;
