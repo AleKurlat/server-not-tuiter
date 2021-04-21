@@ -63,12 +63,14 @@ app.use("/api/usuarios", rutasUsuarios);
 app.post("/api/login", async (req, res)=> {
     try {
         if(!req.body.usuario || !req.body.clave) {
+            res.statusCode = 400;
             throw new Error ("No enviaste todos los datos necesarios");
         }
 
         //paso 1: busco el usuario en base de datos
         let respuesta = await model.buscarUnUsuarioPorUsername(req.body.usuario)
         if(respuesta.length == 0){
+            res.statusCode = 404;
             throw new Error("Ha ingresado un usuario que no existe");
         } 
 
@@ -76,6 +78,7 @@ app.post("/api/login", async (req, res)=> {
 
         const recuperarClaveEncriptada = respuesta[0].clave;
         if(!bcrypt.compareSync(req.body.clave, recuperarClaveEncriptada)){
+            res.statusCode = 400;
             throw new Error("Ha ingresado incorrectamente la clave");
         }
 
@@ -93,7 +96,8 @@ app.post("/api/login", async (req, res)=> {
     }
 
     catch(e){
-        res.status(413).send({message: e.message});
+        if(res.statusCode === 200){res.statusCode = 500};
+        res.send({message: e.message});
     }
 });
 
