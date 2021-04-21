@@ -44,14 +44,13 @@ router.get("/:id", async function (req, res){
 router.delete("/:id", async function (req, res){
     try{
         const posteoABorrar = await model.traerUnPosteo(req.params.id);
-        if(respuesta.length == 0) {
+        if(posteoABorrar.length == 0) {
             throw new Error("No se encontró ningún posteo con ese ID o bien está archivado");
         }
         
         if(res.locals.datosToken.user_id != posteoABorrar[0].id_user) {
             throw new Error ("Un post solo puede ser borrado por su autor");
         }
-
         let respuesta = await model.borrarPosteo(req.params.id);
 
         if (respuesta == 0) {
@@ -68,7 +67,7 @@ router.delete("/:id", async function (req, res){
 router.put("/:id", async function (req, res){
     try{
         const posteoAEditar = await model.traerUnPosteo(req.params.id);
-        if(respuesta.length == 0) {
+        if(posteoAEditar.length == 0) {
             throw new Error("No se encontró ningún posteo con ese ID o bien está archivado");
         }
         
