@@ -57,7 +57,7 @@ module.exports = {
 
     traerUnPosteo: async function(id){
         let respuesta = await qy(
-            "SELECT post.*, usuarios.usuario from post JOIN usuarios ON usuarios.id = post.id_user WHERE id = ? AND archivado is NULL", 
+            "SELECT post.*, usuarios.usuario from post JOIN usuarios ON usuarios.id = post.id_user WHERE post.id = ? AND archivado is NULL", 
             [id]);
         return respuesta;
     },
