@@ -52,4 +52,21 @@ router.delete("/:id", async function (req, res){
     }
 })
 
+router.put("/:id", async function (req, res){
+    try{
+        const posteoAEditar = await model.traerUnPosteo(req.params.id);
+        
+        if(res.locals.datosToken.user_id != posteoAEditar.id_user) {
+            throw new Error ("Un post solo puede ser editado por su autor");
+        }
+        let respuesta = await model.editarPosteo(req.body.body, req.params.id);
+        if (respuesta == 0) {
+            throw new Error ("No se realizó ninguna modificación");
+        } else res.send("Post editado correctamente");
+    }
+    catch(e){
+        res.send({ "Error": e.message });
+    }
+})
+
 module.exports = router;

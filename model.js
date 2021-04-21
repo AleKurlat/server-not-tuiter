@@ -50,4 +50,9 @@ module.exports = {
         let respuesta = await qy("DELETE FROM post WHERE id = ?", [id]);
         return respuesta.affectedRows;
     },
+
+    editarPosteo: async function(body, id){
+        let respuesta = await qy("UPDATE post SET body = ? WHERE id = ?", [body, id]);
+        return respuesta.affectedRows;
+    },
 }
