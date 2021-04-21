@@ -1,6 +1,9 @@
 const qy = require("./conexion.js");
 
 module.exports = {
+
+    //Empiezan las queries de usuarios 
+    
     buscarUsuariosPorEmail: async function(email) {
         let respuesta = await qy("SELECT * FROM usuarios WHERE email = ?", [email]);
         return respuesta;
@@ -31,13 +34,15 @@ module.exports = {
         return respuesta;
     },
     
+    // Empiezan las queries de posteos
+
     traerPosteos: async function(){
-        let respuesta = await qy("SELECT * from post", []);
+        let respuesta = await qy("SELECT * from post WHERE archivado is NULL", []);
         return respuesta;
     },
 
     traerUnPosteo: async function(id){
-        let respuesta = await qy("SELECT * from post WHERE id = ?", [id]);
+        let respuesta = await qy("SELECT * from post WHERE id = ? AND archivado is NULL", [id]);
         return respuesta[0];
     },
     
@@ -47,12 +52,12 @@ module.exports = {
     },
 
     borrarPosteo: async function(id){
-        let respuesta = await qy("DELETE FROM post WHERE id = ?", [id]);
+        let respuesta = await qy("UPDATE post SET archivado = ? WHERE id = ?", [1, id]);
         return respuesta.affectedRows;
     },
 
     editarPosteo: async function(body, id){
-        let respuesta = await qy("UPDATE post SET body = ? WHERE id = ?", [body, id]);
+        let respuesta = await qy("UPDATE post SET body = ? WHERE id = ? AND archivado is NULL", [body, id]);
         return respuesta.affectedRows;
     },
 }
