@@ -39,7 +39,7 @@ const auth = (req, res, next) => {
     }
 
     catch(e) {
-        res.status(403).send({message: e.message});
+        res.status(403).send({"Error": e.message});
     }
 
 } // termina middleware de autenticación
@@ -97,7 +97,7 @@ app.post("/api/login", async (req, res)=> {
 
     catch(e){
         if(res.statusCode === 200){res.statusCode = 500};
-        res.send({message: e.message});
+        res.send({"Error": e.message});
     }
 });
 

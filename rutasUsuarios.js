@@ -10,7 +10,7 @@ router.get("/", async (req, res)=> {
     }
     catch(e){
         if(res.statusCode === 200){res.statusCode = 500};
-        res.send({message: e.message});
+        res.send({"Error": e.message});
     }
 });
 
@@ -44,7 +44,7 @@ router.post("/", async (req, res)=>{
     }
     catch(e){
         if(res.statusCode === 200){res.statusCode = 500};
-        res.send({message: e.message});
+        res.send({"Error": e.message});
     }
 });
 
