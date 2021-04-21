@@ -14,14 +14,14 @@ module.exports = {
         return respuesta; 
     },
 
-    registrarUsuario: async function(usuario, clave, email, cel) {
-        let respuesta = await qy("INSERT INTO usuarios (usuario, clave, email, cel) VALUE (?, ?, ?, ?)", [usuario, clave, email, cel]);
+    registrarUsuario: async function(usuario, clave, email) {
+        let respuesta = await qy("INSERT INTO usuarios (usuario, clave, email) VALUE (?, ?, ?)", [usuario, clave, email]);
         return respuesta.insertId;
     },
 
     traerUnUsuario: async function(id){
-        let respuesta = await qy("SELECT id, usuario, email, cel from usuarios WHERE id = ?", [id]);
-        return respuesta[0];
+        let respuesta = await qy("SELECT id, usuario, email from usuarios WHERE id = ?", [id]);
+        return respuesta;
     },
 
     buscarUnUsuarioPorUsername: async function(usuario){
@@ -30,7 +30,7 @@ module.exports = {
     },
     
     traerUsuarios: async function(){
-        let respuesta = await qy("SELECT id, usuario, cel, email from usuarios", []);
+        let respuesta = await qy("SELECT id, usuario, email from usuarios", []);
         return respuesta;
     },
     
@@ -43,7 +43,7 @@ module.exports = {
 
     traerUnPosteo: async function(id){
         let respuesta = await qy("SELECT * from post WHERE id = ? AND archivado is NULL", [id]);
-        return respuesta[0];
+        return respuesta;
     },
     
     agregarPosteo: async function(body, id_user){

@@ -16,7 +16,7 @@ router.get("/", async (req, res)=> {
 // registrar usuario
 router.post("/", async (req, res)=>{
     try{
-        if(!req.body.usuario || !req.body.clave || !req.body.email || !req.body.cel) {
+        if(!req.body.usuario || !req.body.clave || !req.body.email ) {
             throw new Error ("No enviaste todos los datos necesarios");
         }
 
@@ -34,9 +34,9 @@ router.post("/", async (req, res)=>{
         const claveEncriptada = await bcrypt.hash(req.body.clave, 10); // es asincronica asi que hay que agregarle siempre async al POST
 
         // Guardo el nuevo registro con la clave encriptada y le muestro al usuario los otros datos
-        respuesta = await model.registrarUsuario(req.body.usuario, claveEncriptada, req.body.email, req.body.cel);
+        respuesta = await model.registrarUsuario(req.body.usuario, claveEncriptada, req.body.email);
         let regresarUsuarioRegistrado = await model.traerUnUsuario(respuesta); 
-        res.json(regresarUsuarioRegistrado);
+        res.json(regresarUsuarioRegistrado[0]);
     }
     catch(e){
         res.status(413).send({message: e.message});
@@ -46,7 +46,10 @@ router.post("/", async (req, res)=>{
 router.get("/:id", async function (req, res){
     try{
         let respuesta = await model.traerUnUsuario(req.params.id);
-        res.send(respuesta);
+        if(respuesta.length == 0) {
+            throw new Error("No se encontró ningún usuario con ese ID");
+        }
+        res.send(respuesta[0]);
     }
     catch(e){
         res.status(413).send({ "Error": e.message });
@@ -56,6 +59,9 @@ router.get("/:id", async function (req, res){
 router.get("/user/:usuario", async function (req, res){
     try{
         let respuesta = await model.buscarUnUsuarioPorUsername(req.params.usuario);
+        if(respuesta.length == 0) {
+            throw new Error("No se encontró ningún usuario con ese nombre");
+        }
         delete respuesta[0].clave;
         res.send(respuesta[0]);
         }
