@@ -12,8 +12,7 @@ const rutasUsuarios= require('./rutasUsuarios.js');
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/posteos", rutasPosteos);
-app.use("/api/usuarios", rutasUsuarios);
+
 
 //establezco middleware de autenticación
 
@@ -41,6 +40,8 @@ const auth = (req, res, next) => {
 
 } // termina middleware de autenticación
 
+
+
 auth.unless = unless; // defino método de excepción al middleware de autenticación
 
 // llamo a método de excepción al middleware de autenticación, que se interpone antes de hacer cualquier cosa
@@ -51,6 +52,8 @@ app.use(auth.unless({
     ]
 })); 
 
+app.use("/api/posteos", rutasPosteos);
+app.use("/api/usuarios", rutasUsuarios);
 // Loguearse
 
 app.post("/api/login", async (req, res)=> {
