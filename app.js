@@ -31,6 +31,10 @@ const auth = (req, res, next) => {
             }
         });
 
+        const base64Url = token.split('.')[1];
+        const base64Decode = Buffer.from(base64Url, "base64");
+        res.locals.datosToken = JSON.parse(base64Decode);
+
         next();
     }
 
