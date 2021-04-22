@@ -1,4 +1,4 @@
-const qy = require("./conexion.js");
+const qy = require("./conexionMYSQL.js");
 
 module.exports = {
 

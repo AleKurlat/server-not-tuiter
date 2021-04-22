@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const model = require("./model.js");
+//const model = require("./modelMYSQL.js");
+const model = require("./modelPG.js");
 
 router.get("/", async (req, res)=> {
     try {
@@ -21,8 +22,9 @@ router.post("/", async (req, res)=> {
         }
         const fechaPosteo = new Date();
         let respuesta = await model.agregarPosteo(req.body.body, res.locals.datosToken.user_id, fechaPosteo);
-        let regresarPosteo = await model.traerUnPosteo(respuesta);
-        res.send(regresarPosteo[0]);
+        //let regresarPosteo = await model.traerUnPosteo(respuesta);
+        //res.send(regresarPosteo[0]);
+        res.send(respuesta);
     }
     catch(e){
         if(res.statusCode === 200){res.statusCode = 500};

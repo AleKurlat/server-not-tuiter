@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const model = require("./model.js");
+//const model = require("./modelMYSQL.js");
+const model = require("./modelPG.js");
+
 const bcrypt = require("bcrypt")
 
 router.get("/", async (req, res)=> {
@@ -39,8 +41,9 @@ router.post("/", async (req, res)=>{
 
         // Guardo el nuevo registro con la clave encriptada y le muestro al usuario los otros datos
         respuesta = await model.registrarUsuario(req.body.usuario, claveEncriptada, req.body.email);
-        let regresarUsuarioRegistrado = await model.traerUnUsuario(respuesta); 
-        res.json(regresarUsuarioRegistrado[0]);
+        //let regresarUsuarioRegistrado = await model.traerUnUsuario(respuesta); 
+        //res.json(regresarUsuarioRegistrado[0]);
+        res.send(respuesta);
     }
     catch(e){
         if(res.statusCode === 200){res.statusCode = 500};

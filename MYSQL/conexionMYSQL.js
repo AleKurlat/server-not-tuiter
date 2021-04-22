@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 const util = require ("util");
-const settings= require("./settings.json");
+const settings= require("./settingsMYSQL.json");
 
 const conexion = mysql.createConnection(settings);
 
