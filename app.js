@@ -71,6 +71,7 @@ app.post("/api/login", cors(), async (req, res)=> {
         }
 
         //paso 1: busco el usuario en base de datos
+        console.log("realizando busqueda en base de datos")
         let respuesta = await model.buscarUnUsuarioPorUsername(req.body.usuario)
         if(respuesta.length == 0){
             res.statusCode = 404;
