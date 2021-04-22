@@ -91,7 +91,8 @@ router.put("/:id", async function (req, res){
             throw new Error("Es necesario que el posteo no esté vacío");
         }
 
-        let respuesta = await model.editarPosteo(req.body.body, req.body.editado, req.params.id);
+        const fechaEdicion = new Date();
+        let respuesta = await model.editarPosteo(req.body.body, fechaEdicion, req.params.id);
 
         if (respuesta == 0) {
             res.statusCode = 400;
