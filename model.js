@@ -76,10 +76,10 @@ module.exports = {
         return respuesta.affectedRows;
     },
 
-    editarPosteo: async function(body, id){
+    editarPosteo: async function(body, editado, id){
         let respuesta = await qy(
-            "UPDATE post SET body = ? WHERE id = ? AND archivado is NULL", 
-            [body, id]);
+            "UPDATE post SET body = ?, editado = ? WHERE id = ? AND archivado is NULL", 
+            [body, editado, id]);
         return respuesta.affectedRows;
     },
 }
