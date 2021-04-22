@@ -12,6 +12,7 @@ const rutasPosteos = require('./rutasPosteos.js');
 const rutasUsuarios= require('./rutasUsuarios.js');
 
 app.use(cors());
+app.options('*', cors()) // include before other routes
 app.use(express.json());
 
 //establezco middleware de autenticación
