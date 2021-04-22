@@ -19,7 +19,8 @@ router.post("/", async (req, res)=> {
             res.statusCode = 400;
             throw new Error("Es necesario que el posteo no esté vacío");
         }
-        let respuesta = await model.agregarPosteo(req.body.body, res.locals.datosToken.user_id);
+        const fechaPosteo = new Date();
+        let respuesta = await model.agregarPosteo(req.body.body, res.locals.datosToken.user_id, fechaPosteo);
         let regresarPosteo = await model.traerUnPosteo(respuesta);
         res.send(regresarPosteo[0]);
     }

@@ -62,10 +62,10 @@ module.exports = {
         return respuesta;
     },
     
-    agregarPosteo: async function(body, id_user){
+    agregarPosteo: async function(body, id_user, fecha){
         let respuesta = await qy(
-            "INSERT INTO post (body, id_user) VALUE (?, ?)", 
-            [body, id_user]);
+            "INSERT INTO post (body, id_user, fecha) VALUE (?, ?, ?)", 
+            [body, id_user, fecha]);
         return respuesta.insertId;
     },
 
