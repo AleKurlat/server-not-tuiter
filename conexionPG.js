@@ -1,3 +1,4 @@
+//const settings = require("./settingsPGlocal.json");
 const settings = require("./settingsPG.json");
 const { Client } = require("pg");
 
