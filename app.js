@@ -11,7 +11,7 @@ const port = process.env.PORT ? process.env.PORT : 3001;
 const rutasPosteos = require('./rutasPosteos.js');
 const rutasUsuarios= require('./rutasUsuarios.js');
 
-app.use(cors());
+
 app.use(express.json());
 
 
@@ -59,6 +59,7 @@ app.use(auth.unless({
 
 app.use("/api/posteos", rutasPosteos);
 app.use("/api/usuarios", rutasUsuarios);
+app.use(cors());
 // Loguearse
 
 app.post("/api/login", async (req, res)=> {
