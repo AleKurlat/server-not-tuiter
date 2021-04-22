@@ -17,6 +17,7 @@ app.use(express.json());
 
 //establezco middleware de autenticación
 
+/*
 const auth = (req, res, next) => {
     try{
         let token = req.headers["authorization"];
@@ -56,6 +57,7 @@ app.use(auth.unless({
         {url : "/api/usuarios", methods: ["POST"]},
     ]
 })); 
+*/
 
 app.use("/api/posteos", rutasPosteos);
 app.use("/api/usuarios", rutasUsuarios);
