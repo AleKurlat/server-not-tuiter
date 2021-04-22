@@ -17,7 +17,6 @@ app.use(express.json());
 
 //establezco middleware de autenticación
 
-/*
 const auth = (req, res, next) => {
     try{
         let token = req.headers["authorization"];
@@ -57,14 +56,14 @@ app.use(auth.unless({
         {url : "/api/usuarios", methods: ["POST"]},
     ]
 })); 
-*/
+
 
 app.use("/api/posteos", rutasPosteos);
 app.use("/api/usuarios", rutasUsuarios);
 
 // Loguearse
 
-app.post("/api/login", async (req, res)=> {
+app.post("/api/login", cors(), async (req, res)=> {
     try {
         if(!req.body.usuario || !req.body.clave) {
             res.statusCode = 400;
