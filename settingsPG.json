@@ -1,7 +1,6 @@
 {            
-  "host": "localhost",
-  "user": "postgres",
-  "password": "root",
-  "database": "not_tuiter",
-  "port": 5432
+  "connectionString": "process.env.DATABASE_URL",
+  "ssl": {
+    "rejectUnauthorized": false
+  }
 }

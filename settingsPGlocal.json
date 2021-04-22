@@ -1,0 +1,7 @@
+{            
+  "host": "localhost",
+  "user": "postgres",
+  "password": "root",
+  "database": "not_tuiter",
+  "port": 5432
+}
