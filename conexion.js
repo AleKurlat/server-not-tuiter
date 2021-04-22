@@ -1,12 +1,8 @@
 const mysql = require("mysql");
 const util = require ("util");
+const settings= require("./settings.json");
 
-const conexion = mysql.createConnection({
-    host: "localhost", 
-    user: "root",
-    password: "", 
-    database: "login"
-});
+const conexion = mysql.createConnection(settings);
 
 conexion.connect((error)=>{
     if(error){throw error;} 
