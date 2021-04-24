@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-//const model = require("./modelMYSQL.js");
 const model = require("./modelPG.js");
+const hora = 3600000; //cantidad de milisegundos en una hora
+
+//defino variable que va a contar request de tipo POST a /api/posteos
+var reqPosteos = [];
 
 router.get("/", async (req, res)=> {
     try {
@@ -16,6 +19,14 @@ router.get("/", async (req, res)=> {
 
 router.post("/", async (req, res)=> {
     try {
+        let reqPosteosUser = reqPosteos.filter((elem) => {
+            return(
+                elem.usuario == res.locals.datosToken.user_id && (new Date().getTime() - hora) < elem.fechaPosteo.getTime())});
+
+        if(reqPosteosUser.length>10){
+            res.statusCode = 400;
+            throw new Error("Ya llegaste al límite de posteos permitidos por hora")};
+        
         if(!req.body.body){
             res.statusCode = 400;
             throw new Error("Es necesario que el posteo no esté vacío");
@@ -24,6 +35,13 @@ router.post("/", async (req, res)=> {
         let respuesta = await model.agregarPosteo(req.body.body, res.locals.datosToken.user_id, fechaPosteo);
         //let regresarPosteo = await model.traerUnPosteo(respuesta);
         //res.send(regresarPosteo[0]);
+        reqPosteos.push({
+            "fechaPosteo": new Date(),
+            "usuario": res.locals.datosToken.user_id,
+            "ip": req.ip
+       });
+       console.log(reqPosteosUser);
+
         res.send(respuesta);
     }
     catch(e){

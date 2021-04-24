@@ -11,8 +11,13 @@ const port = process.env.PORT ? process.env.PORT : 3001;
 const rutasPosteos = require('./rutasPosteos.js');
 const rutasUsuarios= require('./rutasUsuarios.js');
 
+// llamo al CORS antes que a cualquier otra cosa, para bloquear todo lo que no venga del cliente autorizado
 
-const whitelist = ['https://not-tuiter.herokuapp.com'];
+var whitelist = ['https://not-tuiter.herokuapp.com'];
+if(!process.env.PORT){
+    whitelist = ["http://localhost:3000"];
+}
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -25,9 +30,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// permito recibir JSONs de cliente (tiene que ir antes que cualquier middelware o ruta que reciba sus parámetros por JSON)
+
 app.use(express.json());
 
-//establezco middleware de autenticación
+// Si quisiera llamar a algún middleware para contar requests para evitar ataques DDOS, debería ir aca abajo y antes de la autenticación
+
+// defino y llamo al middleware de autenticación, que se interpone antes de hacer cualquier cosa, con las expcepciones definidas en el unless. Toda ruta que deba ser autenticada debe llamarse DESPUÉS de esto.
 
 const auth = (req, res, next) => {
     try{
@@ -55,21 +64,23 @@ const auth = (req, res, next) => {
         res.status(403).send({"Error": e.message});
     }
 
-} // termina middleware de autenticación
+}
 
+// a la función "auth" declarada más arriba le creo un método de excepción
 
+auth.unless = unless;  
 
-auth.unless = unless; // defino método de excepción al middleware de autenticación
+// llamo a la función con su excepción 
 
-// llamo a método de excepción al middleware de autenticación, que se interpone antes de hacer cualquier cosa
 app.use(auth.unless({
     path: [
         {url : "/api/login", methods: ["POST"]}, //es un array porque podria usar varios metodos separadas por comas
         {url : "/api/usuarios", methods: ["POST"]},
         {url : "/", methods: ["GET"]},
     ]
-})); 
+}));
 
+// llamo a las rutas de posteos y usuarios. Cualqier middleware que quiera usar universalmente tiene que ir ANTES que esto
 
 app.use("/api/posteos", rutasPosteos);
 app.use("/api/usuarios", rutasUsuarios);
@@ -116,7 +127,6 @@ app.post("/api/login", async (req, res)=> {
         res.send({"Error": e.message});
     }
 });
-
 
 app.get("/", (req, res) => {
     res.send("Bienvenidx");
