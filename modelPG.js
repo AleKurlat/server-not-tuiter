@@ -51,7 +51,7 @@ module.exports = {
 
     traerPosteos: async function(){
         let respuesta = await client.query(
-            "SELECT post.*, usuarios.usuario from post JOIN usuarios ON usuarios.id = post.id_user WHERE archivado is NULL", 
+            "SELECT post.*, usuarios.usuario from post JOIN usuarios ON usuarios.id = post.id_user WHERE archivado is NULL ORDER BY post.id", 
             []);
         return respuesta.rows;
     },
