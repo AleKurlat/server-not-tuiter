@@ -40,7 +40,7 @@ const auth = (req, res, next) => {
 
         jwt.verify(token, "Secret", (err, user) => {
             if (err) {
-                throw new Error("Token invalido")
+                throw new Error("Token invalido. Probar cerrando sesión y volviendo a loguearse");
             }
         });
 
