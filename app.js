@@ -11,10 +11,17 @@ const port = process.env.PORT ? process.env.PORT : 3001;
 const rutasPosteos = require('./rutasPosteos.js');
 const rutasUsuarios= require('./rutasUsuarios.js');
 
+
+const whitelist = ['https://not-tuiter.herokuapp.com'];
 const corsOptions = {
-    origin: 'https://not-tuiter.herokuapp.com/',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
   }
+}
 
 app.use(cors(corsOptions));
 
@@ -77,7 +84,6 @@ app.post("/api/login", async (req, res)=> {
         }
 
         //paso 1: busco el usuario en base de datos
-        console.log("realizando busqueda en base de datos")
         let respuesta = await model.buscarUnUsuarioPorUsername(req.body.usuario)
         if(respuesta.length == 0){
             res.statusCode = 404;
