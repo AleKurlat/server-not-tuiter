@@ -1,18 +1,23 @@
-//APP LOGIN
+//APP not-tuiter
+
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const unless = require("express-unless");
 const bcrypt = require("bcrypt");
 const cors = require('cors');
-//const model = require("./modelMYSQL.js");
 const model = require("./modelPG.js");
 const app = express();
 const port = process.env.PORT ? process.env.PORT : 3001;
 const rutasPosteos = require('./rutasPosteos.js');
 const rutasUsuarios= require('./rutasUsuarios.js');
 
-app.use(cors());
-app.options('*', cors()) // include before other routes
+const corsOptions = {
+    origin: 'https://not-tuiter.herokuapp.com/',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 //establezco middleware de autenticación
@@ -54,6 +59,7 @@ app.use(auth.unless({
     path: [
         {url : "/api/login", methods: ["POST"]}, //es un array porque podria usar varios metodos separadas por comas
         {url : "/api/usuarios", methods: ["POST"]},
+        {url : "/", methods: ["GET"]},
     ]
 })); 
 
@@ -63,7 +69,7 @@ app.use("/api/usuarios", rutasUsuarios);
 
 // Loguearse
 
-app.post("/api/login", cors(), async (req, res)=> {
+app.post("/api/login", async (req, res)=> {
     try {
         if(!req.body.usuario || !req.body.clave) {
             res.statusCode = 400;
@@ -104,6 +110,11 @@ app.post("/api/login", cors(), async (req, res)=> {
         res.send({"Error": e.message});
     }
 });
+
+
+app.get("/", (req, res) => {
+    res.send("Bienvenidx");
+})
 
 // Levantar servidor en el puerto indicado
 
